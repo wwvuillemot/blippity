@@ -1,0 +1,11 @@
+!!!
+%html{:xmlns => "http://www.w3.org/1999/xhtml"}
+  %head
+    %title= "Blippity | #{@title || @subject || (defined?(params) ? params[:controller].humanize.titleize : 'Website')}"
+
+    = render :partial => 'layouts/head'
+    = csrf_meta_tags
+    = yield(:head)
+  %body{ :id => "#{params[:controller]}"}
+    #content
+      = yield
