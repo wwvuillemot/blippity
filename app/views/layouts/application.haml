@@ -1,12 +1,12 @@
 !!!
 %html{:xmlns => "http://www.w3.org/1999/xhtml"}
   %head
-    %title= "Blippity | #{@title || @subject || (defined?(params) ? params[:controller].humanize.titleize : 'Website')}"
+    %title= "Blippity #{@title ? ('| ' + @title): ''}"
 
     = render :partial => 'layouts/head'
     = csrf_meta_tags
     = yield(:head)
-  %body{ :id => "#{params[:controller]}"}
+  %body{ :id => "#{params[:controller].underscore.gsub(/\//,'_')}"}
     =render :partial => 'layouts/header'
     #content
       = yield
