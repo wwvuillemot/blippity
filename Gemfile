@@ -66,4 +66,9 @@ gem "binding_of_caller", ">= 0.7.1", :group => :development, :platforms => [:mri
 
 gem 'newrelic_rpm'
 
+# Awesome Fonts are, well, awesome!
 gem "font-awesome-rails", "~> 3.2.1.1"
+
+# support Facebook login
+gem 'omniauth'
+gem 'omniauth-facebook'

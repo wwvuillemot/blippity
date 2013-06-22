@@ -1,0 +1,7 @@
+export FACEBOOK_KEY=147488902109081
+export FACEBOOK_SECRET=4fc9b2367645f587418f1f1d4daa4ab9
+export MANDRILL_USERNAME=me@blippity.me
+export MANDRILL_API_KEY=tQa1GTE2RH8bt7-Wd0U0OA
+export BLIPPITY_HOST=blippity.dev
+export BLIPPITY_EMAIL_BCC=me@blippity.me
+export BLIPPITY_EMAIL_TO=me@blippity.me
