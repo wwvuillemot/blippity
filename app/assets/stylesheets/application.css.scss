@@ -14,10 +14,25 @@
  *= require_tree .
  */
 
+html, body {
+  height: 100%;
+}
+
 #content{
   border: 0px solid #000;
   margin: 0px auto 0px auto;
 //    width: 500px;
   padding: 20px;
   height: 100%;
+}
+
+#wrap {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -60px;
+}
+
+#content > .container {
+  padding-top: 40px;
 }
