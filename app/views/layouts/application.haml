@@ -9,4 +9,5 @@
   %body{ :id => "#{params[:controller].underscore.gsub(/\//,'_')}"}
     =render :partial => 'layouts/header'
     #content
+      =render :partial => 'layouts/messages'
       = yield

@@ -1,9 +1,22 @@
 #header
   .navbar
     .navbar-inner
-      %a.brand
+      %a.brand{:href => root_path}
         Blippity
-      %ul.nav
+      %ul.nav.pull-left
         %li.active
           %a{:href => root_path}
             Welcome
+      %ul.nav.pull-right.current_user
+        -if current_user
+          %li
+            %a{ :href => edit_user_registration_path(current_user) }
+              =current_user.display_name
+              -image_tag current_user.image_url
+          %li
+            %a{ :href => destroy_user_session_path, :data => { :method => :delete} }
+              %i.icon-signout
+        -else
+          %li
+            %a{:href => user_omniauth_authorize_path(:facebook)}
+              %i.icon-facebook-sign

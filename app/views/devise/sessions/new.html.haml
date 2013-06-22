@@ -5,5 +5,8 @@
     = f.input :password, :required => false
     = f.input :remember_me, :as => :boolean if devise_mapping.rememberable?
   .form-actions
-    = f.button :submit, "Sign in"
+    = f.button :submit, "Sign in", :class => 'btn'
+    %a.btn{:href => user_omniauth_authorize_path(:facebook)}
+      Sign In with 
+      %i.icon-facebook-sign
 = render "devise/shared/links"
