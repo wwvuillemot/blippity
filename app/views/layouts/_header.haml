@@ -6,13 +6,19 @@
         %span.icon-bar
         %span.icon-bar
       %a.brand{:href => root_path}
-        Blippity
+        blippity
       .nav-collapse.collapse
         %ul.nav
-          %li.active
+          %li{:class => (params[:controller] == 'pages' && params[:action] == 'index' ? 'active' : nil)}
             %a{:href => root_path}
-              Welcome
+              welcome
+          %li{:class => (params[:controller] == 'pages' && params[:action] == 'about' ? 'active' : nil)}
+            %a{:href => about_path}
+              about
           -if current_user
+            %li{:class => (params[:controller] == 'play' ? 'active' : nil)}
+              %a{:href => play_path}
+                play
             %li
               %a{ :href => edit_user_registration_path(current_user) }
                 =current_user.display_name
