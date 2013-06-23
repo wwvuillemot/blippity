@@ -1,13 +1,13 @@
 .navbar.navbar-fixed-top
   .navbar-inner
     .container
-      %button.btn.btn-navbar.collapsed{ :type => :button, :data => { :toggle => :collapse, :target => ".nav-collapse" } }
+      %button.btn.btn-navbar{ :type => :button, :data => { :toggle => :collapse, :target => ".nav-collapse" } }
         %span.icon-bar
         %span.icon-bar
         %span.icon-bar
       %a.brand{:href => root_path}
         blippity
-      .nav-collapse.collapse
+      .nav-collapse.collapse{:style => 'height: 0px;'}
         %ul.nav
           %li{:class => (params[:controller] == 'pages' && params[:action] == 'index' ? 'active' : nil)}
             %a{:href => root_path}
