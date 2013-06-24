@@ -9,9 +9,6 @@
         blippity
       .nav-collapse.collapse{:style => 'height: 0px;'}
         %ul.nav
-          %li
-            %a{:id => 'blipManager'}
-              %i.icon-pause
           %li{:class => (params[:controller] == 'pages' && params[:action] == 'index' ? 'active' : nil)}
             %a{:href => root_path}
               welcome
@@ -19,9 +16,13 @@
             %a{:href => about_path}
               about
           -if current_user
-            %li{:class => (params[:controller] == 'play' ? 'active' : nil)}
+            %li{:class => (params[:controller] == 'games' ? 'active' : nil)}
               %a{:href => play_path}
                 play
+              -if(params[:controller] == 'games')
+                %li
+                  %a{:id => 'blipManager'}
+                    %i.icon-pause
             %li
               %a{ :href => edit_user_registration_path(current_user) }
                 =current_user.display_name

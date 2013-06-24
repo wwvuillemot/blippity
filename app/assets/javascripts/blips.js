@@ -106,18 +106,3 @@ var BlipManager = ( function(maxNumberOfBlips) {
   }
   
 });
-
-
-$(document).ready( function() {
-  var maxNumberOfBlips = 100;
-  blipManager = new BlipManager(maxNumberOfBlips);
-  $('#blipManager').bind('click', function(){
-    if(blipManager.running){
-      blipManager.pause();
-    } else {
-      blipManager.resume();      
-    }
-  });
-  blipManager.init();
-
-});
