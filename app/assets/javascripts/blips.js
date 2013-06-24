@@ -1,18 +1,19 @@
 var blipManager;
 
-var BlipLight = (function (position_left, position_top, duration, distance, blip_width, blipManager) {
+var BlipLight = (function (blipManager, position_left, position_top, duration, distance, blip_width, letter) {
   this.position_left = position_left;
   this.position_top = position_top;
   this.duration = duration;
   this.distance = distance;
   this.blip_width = blip_width;
   this.blipManager = blipManager;
+  this.letter = letter;
 
   this.animate = function(dom){
     this.blip = jQuery('<div/>', {
         class: 'blip',
-        style: 'left: ' + this.position_left + 'px; top: ' + this.position_top + 'px; height: ' + blip_width + 'px; width: ' + blip_width + 'px',
-        text: ''});
+        style: 'left: ' + this.position_left + 'px; top: ' + this.position_top + 'px; height: ' + this.blip_width + 'px; width: ' + this.blip_width + 'px;' + 'line-height: ' + this.blip_width + 'px;',
+        text: this.letter });
     dom.append(this.blip);
     self = this;
     this.blip.animate(
@@ -44,15 +45,27 @@ var BlipManager = ( function(maxNumberOfBlips) {
       var position_left = 0;
       var position_top = 0;
       var duration = 0;
+      var letter = '';
+      var blip_width;
       while(distance < 50)
       {
         position_left = $(window).width() * Math.random();
         position_top = $(window).height() * Math.random();
         duration = 10000 * Math.random();
-        distance = $(window).height() - position_top - 58;        
+        distance = $(window).height() - position_top - 58;  
+        blip_width = 40 * Math.random();
       }
-      blip_width = 30 * Math.random();
-      var blipLight = new BlipLight(position_left, position_top, duration, distance, blip_width, this);
+      if(duration >= 3000 && blip_width >= 30 ){
+        A_IN_ASCII = 65;
+        ascii_code = A_IN_ASCII + Math.floor(26 * Math.random());
+        letter = String.fromCharCode(ascii_code); 
+        console.log(ascii_code + ' => ' + letter);
+      }
+      else
+      {
+        letter = '';
+      }
+      var blipLight = new BlipLight(this, position_left, position_top, duration, distance, blip_width, letter);
       blipLight.animate($('#wrap')); 
     }      
   };
