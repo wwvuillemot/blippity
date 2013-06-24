@@ -9,6 +9,9 @@
         blippity
       .nav-collapse.collapse{:style => 'height: 0px;'}
         %ul.nav
+          %li
+            %a{:id => 'blipManager'}
+              %i.icon-pause
           %li{:class => (params[:controller] == 'pages' && params[:action] == 'index' ? 'active' : nil)}
             %a{:href => root_path}
               welcome
