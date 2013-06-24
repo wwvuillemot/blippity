@@ -40,10 +40,17 @@ var BlipManager = ( function(maxNumberOfBlips) {
     if(this.running && (this.numberOfBlips <= this.maxNumberOfBlips))
     {
       this.numberOfBlips++;
-      position_left = $(window).width() * Math.random();
-      position_top = $(window).height() * Math.random();
-      duration = 10000 * Math.random();
-      distance = position_top + $(window).height() * Math.random();
+      var distance = -1;
+      var position_left = 0;
+      var position_top = 0;
+      var duration = 0;
+      while(distance < 50)
+      {
+        position_left = $(window).width() * Math.random();
+        position_top = $(window).height() * Math.random();
+        duration = 10000 * Math.random();
+        distance = $(window).height() - position_top - 58;        
+      }
       blip_width = 30 * Math.random();
       var blipLight = new BlipLight(position_left, position_top, duration, distance, blip_width, this);
       blipLight.animate($('#wrap')); 
