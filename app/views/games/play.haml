@@ -1,16 +1,17 @@
 :javascript
+  var blipManager;
   $(document).ready( function() {
-    var maxNumberOfBlips = 100;
-    blipManager = new BlipManager(maxNumberOfBlips);
+    var maxNumberOfBlipsAtATime = jQuery.browser.mobile ? 20 : 100;
+    var domNodeParent    = '#wrap';
+    blipManager = new BlipManager(maxNumberOfBlipsAtATime, domNodeParent);
     $('#blipManager').bind('click', function(){
-      if(blipManager.running){
+      if(blipManager.isRunning()){
         blipManager.pause();
       } else {
         blipManager.resume();      
       }
     });
     blipManager.init();
-
   });
 %p
   marco.

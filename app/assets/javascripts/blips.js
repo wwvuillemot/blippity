@@ -1,121 +1,138 @@
-var blipManager;
-
-var BlipLight = (function (blipManager, position_left, position_top, duration, distance, blip_width, letter) {
-  this.position_left = position_left;
-  this.position_top = position_top;
-  this.duration = duration;
-  this.distance = distance;
-  this.blip_width = blip_width;
-  this.blipManager = blipManager;
-  this.letter = letter;
-
-  this.animate = function(dom){
-    this.blip = jQuery('<div/>', {
+var BlipLight = (function (blipManager) {
+  this.blipManager      = blipManager;
+  
+  this.animate = function(domNode, blipPositionLeft, blipPositionTop, blipDuration, blipDistance, blipWidth, blipLetter){    
+    blipNode = jQuery('<div/>', {
         class: 'blip',
-        style: 'left: ' + this.position_left + 'px; top: ' + this.position_top + 'px; height: ' + this.blip_width + 'px; width: ' + this.blip_width + 'px;' + 'line-height: ' + this.blip_width + 'px;',
-        text: this.letter });
-    dom.append(this.blip);
+        style: 'left: ' + blipPositionLeft + 'px; top: ' + blipPositionTop + 'px; height: ' + blipWidth + 'px; width: ' + blipWidth + 'px;' + 'line-height: ' + blipWidth + 'px;',
+        text: blipLetter });
+
+    domNode.append(blipNode);
     self = this;
-    this.blip.animate(
+    // animate( end-conditions, duration in milliseconds, end-state call-back )
+    blipNode.animate(
       {
         opacity: '=0.0',
-        top: '+=' + this.distance,
-        width: 'toggle',
-        height: 'toggle',
+        top:     '+=' + blipDistance,
+        width:   'toggle',
+        height:  'toggle',
       }, 
-      this.duration, 
+      blipDuration, 
       function() {
         $(this).remove();
         self.blipManager.done();
       }
     );
-
-  }
+  };
+    
 });
 
-var BlipManager = ( function(maxNumberOfBlips) {
-  this.maxNumberOfBlips = maxNumberOfBlips;
-  this.numberOfBlips = 0;
+var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
+  var _maxNumberOfBlips         = maxNumberOfBlips;
+  var _domNodeParent            = $(domNodeParent);
   
-  this.create = function(){
-    if(this.running && (this.numberOfBlips <= this.maxNumberOfBlips))
-    {
-      this.numberOfBlips++;
-      var distance = -1;
-      var position_left = 0;
-      var position_top = 0;
-      var duration = 0;
-      var letter = '';
-      var blip_width;
-      while(distance < 50)
-      {
-        position_left = $(window).width() * Math.random();
-        position_top = $(window).height() * Math.random();
-        duration = 10000 * Math.random();
-        distance = $(window).height() - position_top - 58;  
-        blip_width = 40 * Math.random();
-      }
-      if(duration >= 3000 && blip_width >= 30 ){
-        A_IN_ASCII = 65;
-        ascii_code = A_IN_ASCII + Math.floor(26 * Math.random());
-        letter = String.fromCharCode(ascii_code); 
-        console.log(ascii_code + ' => ' + letter);
-      }
-      else
-      {
-        letter = '';
-      }
-      var blipLight = new BlipLight(this, position_left, position_top, duration, distance, blip_width, letter);
-      blipLight.animate($('#wrap')); 
-    }      
-  };
+  // initial state
+  var _numberOfBlips            = 0;
+  var _running                  = false;
   
+  // constraints for the blip of light  
+  var _minimumLetterDuration    = 3000;
+  var _minimumLetterWidth       = 30;
+  var _minimumBlipWidth         = 1;
+  var _maximumBlipWidth         = 40;
+  var _minimumBlipDistance      = 100;
+  var _maximumBlipDuration      = 10000;
+  var _footerHeight             = 60;
+  var _AInAscii                 = 65;
+  var _emptyBlipCharacter       = '';
+  var _lettersInAlphabet        = 26;
+  
+  // done - called by blip of light when its journey is done
   this.done = function(){
-    this.numberOfBlips--;
-    this.create();
+    _numberOfBlips--;
+    this._create();
   }
   
+  // pause - user calls to pause blips
   this.pause = function(){
-    this.setPause();
-    this.setRunning(false);
+    this._setPauseButton();
+    this._setRunning(false);
   }
   
-  this.setPause = function(){
-    $('#blipManager').html("<i class='icon-play'></i>");
-  }
-  
+  // resume - user calls to resume blips
   this.resume = function(){
-    this.setResume();
-    this.numberOfBlips = 0;    
-    this.setRunning(true);
+    this._setResumeButton();
+    this._setRunning(true);
     this.init();  
   }
   
-  this.setResume = function(){
-    $('#blipManager').html("<i class='icon-pause'></i>");
+  // running - are blips running or not?
+  this.isRunning = function(){
+    return _running;
   }
-  
+
+  // start - start the blips; will honor the previous session's state
   this.init = function(){
-    this.getRunning();
-    this.setRunning(this.running);
-    if(this.running){
-      this.setResume();
-      for(var blip = 1; blip <= this.maxNumberOfBlips; blip++)
+    this._getRunning();
+    this._setRunning(_running);
+    if(_running){
+      this._setResumeButton();
+      for(var blip = _numberOfBlips; blip < _maxNumberOfBlips; blip++)
       {
-        this.create();    
+        this._create();    
       }    
     } else {
-      this.setPause();
+      this._setPauseButton();
     }
   }
+
+  // private methods
   
-  this.setRunning = function(isRunning){
-    this.running = isRunning;
+  // create - create a new blip of light
+  this._create = function(){
+    if(_running && (_numberOfBlips <= _maxNumberOfBlips))
+    {
+      _numberOfBlips++;
+      var blipDistance      = -1;
+      var blipPositionLeft  = 0;
+      var blipPositionTop   = 0;
+      var blipDuration      = 0;
+      var blipLetter        = _emptyBlipCharacter;
+      var blipWidth         = _minimumBlipWidth - 1;
+      
+      while(blipDistance < _minimumBlipDistance)
+      {
+        blipPositionLeft  = $(window).width() * Math.random();
+        blipPositionTop   = $(window).height() * Math.random();
+        blipDuration      = _maximumBlipDuration * Math.random();
+        blipDistance      = $(window).height() - (blipPositionTop + _footerHeight);
+        blipWidth         = _maximumBlipWidth * Math.random();
+      }
+      
+      if(blipDuration >= _minimumLetterDuration && blipWidth >= _minimumLetterWidth ){
+        ascii_code = _AInAscii + Math.floor(_lettersInAlphabet * Math.random());
+        blipLetter = String.fromCharCode(ascii_code); 
+      }
+      
+      blipLight = new BlipLight(this);
+      blipLight.animate(_domNodeParent, blipPositionLeft, blipPositionTop, blipDuration, blipDistance, blipWidth, blipLetter);
+    }      
+  };  
+  
+  this._setPauseButton = function(){
+    $('#blipManager').html("<i class='icon-play'></i>");
+  }
+  
+  this._setResumeButton = function(){
+    $('#blipManager').html("<i class='icon-pause'></i>");
+  }  
+  this._setRunning = function(isRunning){
+    _running = isRunning;
     $.cookie("blipManagerRunning", isRunning);
   }
 
-  this.getRunning = function(){
-    this.running = $.cookie("blipManagerRunning") == 'true' ? true : false;
+  this._getRunning = function(){
+    _running = $.cookie("blipManagerRunning") == 'true' ? true : false;
   }
   
 });
