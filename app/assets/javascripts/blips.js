@@ -89,21 +89,24 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
   $('#total').html(_total); 
 
   $('#erase').click(function(){
-    $('#answer').html('');
-    $('#status').html('&nbsp;');
-    $('.selected').fadeOut(500).remove();
+    _blipManager.erase();
   });
   
   $('#next').click(function(){
-    _blipManager.nextQuestion();
-    _wrong++;
-    _blipManager._score(_pointsPerWordWrong);
-    $('#wrong').html(_wrong);
-    $('#answer').html('');
-    $('#status').html('&nbsp;');
-    $('.selected').fadeOut(500).hide();
+    this.next();
   });
   
+  $('body').keyup(function(e){
+    if(e.keyCode == 39){
+      _blipManager.next();
+    }
+    if(e.keyCode == 8){
+      _blipManager.erase();
+    }
+    if(e.keyCode == 32){
+      _blipManager.toggle();
+    }
+  });
   
   $('#question').html(_pairs[_questionsAnswered].question + '?');
   
@@ -150,8 +153,12 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
   }
   
   // running - are blips running or not?
-  this.isRunning = function(){
-    return _running;
+  this.toggle = function(){
+    if(_running){
+      this.pause();
+    } else {
+      this.resume();      
+    }
   }
 
   // start - start the blips; will honor the previous session's state
@@ -168,6 +175,22 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
     } else {
       this._setPauseButton();
     }
+  }
+  
+  this.erase = function(){
+    $('#answer').html('');
+    $('#status').html('&nbsp;');
+    $('.selected').fadeOut(500).remove();
+  }
+  
+  this.next = function(){
+    this.nextQuestion();
+    _wrong++;
+    this._score(_pointsPerWordWrong);
+    $('#wrong').html(_wrong);
+    $('#answer').html('');
+    $('#status').html('&nbsp;');
+    $('.selected').fadeOut(500).hide();    
   }
   
   this.nextQuestion = function(){

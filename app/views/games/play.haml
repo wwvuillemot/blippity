@@ -5,11 +5,7 @@
     var domNodeParent    = '#wrap';
     blipManager = new BlipManager(maxNumberOfBlipsAtATime, domNodeParent);
     $('#blipManager').bind('click', function(){
-      if(blipManager.isRunning()){
-        blipManager.pause();
-      } else {
-        blipManager.resume();      
-      }
+      blipManager.toggle();
     });
     blipManager.init();
   });
