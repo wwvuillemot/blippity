@@ -19,6 +19,17 @@
 }
 .selected
 {
+  background-color: goldenrod;
+  box-shadow: 0px 0px 10px goldenrod;
+}
+.wrong
+{
+  background-color: darkred;
+  box-shadow: 0px 0px 10px darkred;
+  color: #fff;
+}
+.right
+{
   background-color: darkgreen;
   box-shadow: 0px 0px 10px darkgreen;
   color: #fff;

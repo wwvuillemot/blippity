@@ -1,6 +1,14 @@
-%p
-  i'm blippity.
-%p
-  and
-  %a{:href => user_omniauth_authorize_path(:facebook)}
-    you?
+-if current_user
+  %p
+    hi, #{current_user.display_name}.
+  %p
+    wanna
+    %a{ :href => play_path }
+      play?
+-else
+  %p
+    i'm blippity.
+  %p
+    and
+    %a{:href => user_omniauth_authorize_path(:facebook)}
+      you?

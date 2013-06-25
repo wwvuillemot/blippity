@@ -34,7 +34,12 @@ var BlipLight = (function (blipManager) {
         $(this).removeClass('hovered');
         $(this).addClass('selected');
         $(this).stop();
-        self.blipManager.answer($(this).html());
+        isRight = self.blipManager.answer($(this).html());
+        if(isRight){
+          $(this).addClass('right');
+        } else {
+          $(this).addClass('wrong');          
+        }
       });
     }
     
@@ -189,19 +194,22 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
     $('#answer').append(letter);
     answer = _pairs[_questionsAnswered].answer;
     player_answer = $('#answer').html();
-    regex = RegExp(player_answer + '.*','i');
+    regex = RegExp('^' + player_answer + '.*$','i');
     if(player_answer == answer){
       $('#status').show().html('yatzhee.');
       this._score(_pointsPerWordRight);
       _right++;
       $('#right').html(_right);
       this.nextQuestion();
+      return true;
     } else if(answer.match(regex)){
       this._score(_pointsPerLetterRight);
+      return true;
     } else {
       this._score(_pointsPerLetterWrong);
       $('#status').show().html('huh?');
       $('#status').delay(1000).fadeOut(1000).delay(10).show();      
+      return false;
     }
   };
   
