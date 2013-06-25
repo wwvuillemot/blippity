@@ -5,8 +5,9 @@ var BlipLight = (function (blipManager) {
   this.animate = function(domNode, blipPositionLeft, blipPositionTop, blipDuration, blipDistance, blipWidth, blipLetter){    
     blipNode = jQuery('<div/>', {
         class: 'blip',
-        style: 'left: ' + blipPositionLeft + 'px; top: ' + blipPositionTop + 'px; height: ' + blipWidth + 'px; width: ' + blipWidth + 'px;' + 'line-height: ' + blipWidth + 'px;',
+        style: 'left: ' + blipPositionLeft + 'px; top: ' + blipPositionTop + 'px; height: ' + blipWidth + 'px; width: ' + blipWidth + 'px; line-height: ' + (blipWidth-10) + 'px; font-size: ' + (blipWidth-15) + 'px;',
         text: blipLetter });
+        
 
     self = this;
 
@@ -51,6 +52,8 @@ var BlipLight = (function (blipManager) {
         top:     '+=' + blipDistance,
         width:   'toggle',
         height:  'toggle',
+        lineHeight: 'toggle',
+        fontSize: 'toggle',
       }, 
       blipDuration, 
       function() {
@@ -71,23 +74,23 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
   var _right                    = 0;
   var _wrong                    = 0;
   var _blipManager              = this;
+  var _ready                    = false;
   
-  var _pairs = [
-      {  question: 'foo',
-         answer: 'bar'
-      },
-      {  question: 'marco',
-         answer: 'polo'
-      },
-    ];
+  $.ajax({
+    dataType: "json",
+    url: '/question_answers.json',
+    success: function(data){
+      _question_answer_pairs = data,
+      _total = _question_answer_pairs.length;
+      $('#score').html(_score); 
+      $('#right').html(_right); 
+      $('#wrong').html(_wrong); 
+      $('#total').html(_total); 
+      $('#question').html(_question_answer_pairs[_questionsAnswered].question + '?');
+      _ready = true;
+    }
+  });
     
-  _total = _pairs.length;
-  
-  $('#score').html(_score); 
-  $('#right').html(_right); 
-  $('#wrong').html(_wrong); 
-  $('#total').html(_total); 
-
   $('#erase').click(function(){
     _blipManager.erase();
   });
@@ -108,8 +111,6 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
     }
   });
   
-  $('#question').html(_pairs[_questionsAnswered].question + '?');
-  
   // initial state
   var _numberOfBlips            = 0;
   var _running                  = false;
@@ -117,7 +118,7 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
   // constraints for the blip of light  
   var _minimumLetterDuration    = 5000;
   var _minimumLetterWidth       = 40;
-  var _minimumBlipWidth         = 1;
+  var _minimumBlipWidth         = 20;
   var _maximumBlipWidth         = 60;
   var _minimumBlipDistance      = 100;
   var _maximumBlipDuration      = 10000;
@@ -163,6 +164,15 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
 
   // start - start the blips; will honor the previous session's state
   this.init = function(){
+    var tries = 0;
+    while(!_ready && tries <= 10){
+      setTimeout(function(){ }, 500);
+      tries++;
+    }
+    if(!_ready)
+    {
+      return;
+    }
     this._getRunning();
     this._setRunning(_running);
     this._setControls();
@@ -195,11 +205,11 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
   
   this.nextQuestion = function(){
     _questionsAnswered++;
-    if(_questionsAnswered < _pairs.length){
+    if(_questionsAnswered < _question_answer_pairs.length){
       $('#status').show().html('&nbsp');
       $('.selected').fadeOut(500).remove();
       $('#answer').show().html('&nbsp;');
-      $('#question').html(_pairs[_questionsAnswered].question + '?');      
+      $('#question').html(_question_answer_pairs[_questionsAnswered].question + '?');      
     }
     else
     {
@@ -215,12 +225,13 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
   
   this.answer = function(letter){
     $('#answer').append(letter);
-    answer = _pairs[_questionsAnswered].answer;
+    answer = _question_answer_pairs[_questionsAnswered].answer;
     player_answer = $('#answer').html();
     regex = RegExp('^' + player_answer + '.*$','i');
     if(player_answer == answer){
       $('#status').show().html('yatzhee.');
-      this._score(_pointsPerWordRight);
+      this._score(parseInt(_question_answer_pairs[_questionsAnswered].bonus));
+      this._score(parseInt(_question_answer_pairs[_questionsAnswered].answer_score));
       _right++;
       $('#right').html(_right);
       this.nextQuestion();

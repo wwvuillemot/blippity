@@ -1,0 +1,27 @@
+%h1 Listing question_answers
+
+%table
+  %tr
+    %th Question
+    %th Answer
+    %th Level
+    %th Score
+    %th Bonus
+    %th
+    %th
+    %th
+
+  - @question_answers.each do |question_answer|
+    %tr
+      %td= question_answer.question
+      %td= question_answer.answer
+      %td= question_answer.level
+      %td= question_answer.score
+      %td= question_answer.bonus
+      %td= link_to 'Show', question_answer
+      %td= link_to 'Edit', edit_question_answer_path(question_answer)
+      %td= link_to 'Destroy', question_answer, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Question answer', new_question_answer_path

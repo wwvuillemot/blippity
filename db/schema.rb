@@ -11,7 +11,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130622224759) do
+ActiveRecord::Schema.define(:version => 20130625142728) do
+
+  create_table "question_answers", :force => true do |t|
+    t.string   "question"
+    t.string   "answer"
+    t.integer  "score",      :default => 0
+    t.integer  "bonus",      :default => 0
+    t.integer  "level",      :default => 1
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
+  end
+
+  add_index "question_answers", ["level"], :name => "index_question_answers_on_level"
 
   create_table "users", :force => true do |t|
     t.string   "username",               :default => ""

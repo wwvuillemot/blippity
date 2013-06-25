@@ -5,3 +5,12 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+question_answers = [
+  ['marco', 'polo'],
+  ['foo', 'bar']
+]
+question_answers.each do |question, answer|
+  puts 'q:' + question + ' => a:' + answer
+  QuestionAnswer.find_or_create_by_question_and_answer(question, answer)
+end
