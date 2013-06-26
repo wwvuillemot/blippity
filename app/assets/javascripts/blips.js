@@ -74,8 +74,8 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
   // -------------------------------------------------------
     
   var _blipManager              = this;
-  var _level                    = 1;
-  
+  var _level                    = $.cookie("blipLevel") ? $.cookie("blipLevel") : 1;
+    
   // per level points
   var _pointsPerLetterRight      = 20;
   var _pointsPerLetterWrong      = -10;
@@ -111,6 +111,10 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
       
   this.loadLevel = function(level){
     _level = level;
+    $.cookie("blipLevel", _level);
+    $('#levels .level').removeClass('selected');
+    $('#levels .level[data-level="' + _level + '"]' ).addClass('selected');
+    
     _questionsAnswered = 0;
     $.ajax({
       dataType: "json",
@@ -253,22 +257,29 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
   
   this.nextQuestion = function(){
     _questionsAnswered++;
-    this._setQuestionAnswer();
     if(_questionsAnswered < _question_answer_pairs.length){
+      this._setQuestionAnswer();
       $('#status').show().html('&nbsp');
       $('.clicked').fadeOut(500).remove();
-      $('#answer').show().html('&nbsp;');
+      $('#answer').show().html('');
       $('#question').html(_question + '?');      
     }
     else
     {
       _questionsAnswered = 0;
-      $('#answer').fadeOut(500);
-      $('#next').fadeOut(500);
-      $('#erase').fadeOut(500);
-      $('#status').fadeIn(1000).html("there aint no more.");
-      $('#question').hide().fadeIn(5000).html('fin.');
-      this.pause();
+      $('.clicked').fadeOut(500).remove();
+      $('#answer').fadeOut(500).show();
+      $('#controls').fadeOut(500);
+      $('#status').fadeIn(1000).html("there aint no more.").delay(500).fadeOut(300).html('').show();
+      $('#question').hide().fadeIn(3000).html('fin.');
+      setTimeout( 
+        function(){ 
+          _blipManager.pause(); 
+          _level++;
+          _blipManager.loadLevel(_level); 
+        }, 
+        3500
+      );
     }
   }  
   
@@ -355,8 +366,17 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
       }
       
       if(blipDuration >= _minimumLetterDuration && blipWidth >= _minimumLetterWidth ){
-        ascii_code = _AInAscii + Math.floor(_lettersInAlphabet * Math.random());
-        blipLetter = String.fromCharCode(ascii_code); 
+        // determine the character to show
+        // increasing reveal less and less
+        probability_of_selecting_answer_character = (0.50 / _level);
+        roll_of_dice = Math.random();
+        if(probability_of_selecting_answer_character <= roll_of_dice ){
+          player_answer = $('#answer').html();
+          blipLetter = _characters[player_answer.length];
+        }else{          
+          ascii_code = _AInAscii + Math.floor(_lettersInAlphabet * Math.random());
+          blipLetter = String.fromCharCode(ascii_code); 
+        }
       }
       
       blipLight = new BlipLight(this);
