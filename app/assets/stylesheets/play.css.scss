@@ -55,13 +55,21 @@
     margin: 5px;
     text-align: center;
     float: left;
-    width: 100px;
-    height: 100px;
-    line-height: 80px;
+    width: 200px;
+    height: 200px;
+    line-height: 160px;
+    .title{
+      font-size: 18px;
+      line-height: 22px;
+    }
     @media (max-width: 380px) {
       width: 128px;
       height: 128px;
       line-height: 105px;
+      .title{
+        font-size: 12px;
+        line-height: 20px;
+      }
     }
     font-size: 1.8em;
     .number{
@@ -71,10 +79,7 @@
       background-color: #ddd;
       box-shadow: 0px 0px 10px #ccc;   
     }
-    .title{
-      font-size: 12px;
-      line-height: 20px;
-    }
+
   }
   .selected{
     background-color: #eee;   
