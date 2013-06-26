@@ -1,12 +1,11 @@
 class QuestionAnswersController < ApplicationController
+  before_filter :authenticate_user!
+  before_filter :load_level
+    
   # GET /question_answers
   # GET /question_answers.json
   def index
-    if params[:level]
-      @question_answers = QuestionAnswer.where(:level => params[:level])
-    else
-      @question_answers = QuestionAnswer.all
-    end
+    @question_answers = @level.question_answers
 
     respond_to do |format|
       format.html # index.html.erb
@@ -48,7 +47,7 @@ class QuestionAnswersController < ApplicationController
 
     respond_to do |format|
       if @question_answer.save
-        format.html { redirect_to @question_answer, notice: 'Question answer was successfully created.' }
+        format.html { redirect_to level_question_answer_path(@level, @question_answer), notice: 'Question answer was successfully created.' }
         format.json { render json: @question_answer, status: :created, location: @question_answer }
       else
         format.html { render action: "new" }
@@ -64,7 +63,7 @@ class QuestionAnswersController < ApplicationController
 
     respond_to do |format|
       if @question_answer.update_attributes(params[:question_answer])
-        format.html { redirect_to @question_answer, notice: 'Question answer was successfully updated.' }
+        format.html { redirect_to level_question_answer_path(@level, @question_answer), notice: 'Question answer was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -80,8 +79,15 @@ class QuestionAnswersController < ApplicationController
     @question_answer.destroy
 
     respond_to do |format|
-      format.html { redirect_to question_answers_url }
+      format.html { redirect_to level_question_answers_url(@level) }
       format.json { head :no_content }
     end
   end
+  
+  private 
+  
+  def load_level
+    @level = Level.find(params[:level_id])
+  end
+    
 end

@@ -1,0 +1,31 @@
+= form_for @level do |f|
+  - if @level.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@level.errors.count, "error")} prohibited this level from being saved:"
+      %ul
+        - @level.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :level
+    = f.number_field :level
+  .field
+    = f.label :title
+    = f.text_field :title
+  .field
+    = f.label :points_per_letter_right,
+    = f.number_field :points_per_letter_right, :min => 0
+  .field
+    = f.label :points_per_word_right,
+    = f.number_field :points_per_word_right, :min => 0
+  .field
+    = f.label :points_per_letter_wrong,
+    = f.number_field :points_per_letter_wrong, :max => 0
+  .field
+    = f.label :points_per_word_wrong,
+    = f.number_field :points_per_word_wrong, :max => 0
+  .field
+    = f.label :points_per_clear,
+    = f.number_field :points_per_clear, :max => 0
+  .actions
+    = f.submit 'Save'

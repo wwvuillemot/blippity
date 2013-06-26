@@ -1,8 +1,9 @@
 class QuestionAnswer < ActiveRecord::Base
+  belongs_to :level
+  
   validates_presence_of :answer
   validates_presence_of :question
   validates_uniqueness_of :question
-  validates_numericality_of :level, :only_integer => true, :greater_than_or_equal_to => 1
   validates_numericality_of :bonus, :only_integer => true, :greater_than_or_equal_to => 0
   validates_numericality_of :score, :only_integer => true, :greater_than_or_equal_to => 0
   
@@ -16,7 +17,7 @@ class QuestionAnswer < ActiveRecord::Base
   end
 
   def generate_score
-    self.score = self.level * 10
+    self.score = self.level.level * 10
   end
   
 end

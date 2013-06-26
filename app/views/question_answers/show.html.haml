@@ -7,15 +7,12 @@
   %b Answer:
   = @question_answer.answer
 %p
-  %b Count:
-  = @question_answer.count
+  %b Score:
+  = @question_answer.score
 %p
   %b Bonus:
   = @question_answer.bonus
-%p
-  %b Level:
-  = @question_answer.level
 
-= link_to 'Edit', edit_question_answer_path(@question_answer)
+= link_to 'Edit', edit_level_question_answer_path(@level, @question_answer)
 \|
-= link_to 'Back', question_answers_path
+= link_to 'Back', level_question_answers_path(@level)

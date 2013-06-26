@@ -1,10 +1,9 @@
-%h1 Listing question_answers
+%h1 Level #{@level.level} Q &amp; A's
 
 %table
   %tr
-    %th Question
-    %th Answer
-    %th Level
+    %th Q
+    %th A
     %th Score
     %th Bonus
     %th
@@ -15,13 +14,12 @@
     %tr
       %td= question_answer.question
       %td= question_answer.answer
-      %td= question_answer.level
       %td= question_answer.score
       %td= question_answer.bonus
-      %td= link_to 'Show', question_answer
-      %td= link_to 'Edit', edit_question_answer_path(question_answer)
+      %td= link_to 'Show', level_question_answer_path(@level, question_answer)
+      %td= link_to 'Edit', edit_level_question_answer_path(@level, question_answer)
       %td= link_to 'Destroy', question_answer, :method => :delete, :data => { :confirm => 'Are you sure?' }
 
 %br
 
-= link_to 'New Question answer', new_question_answer_path
+= link_to 'New Q & A', new_level_question_answer_path(@level)

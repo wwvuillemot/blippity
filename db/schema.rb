@@ -11,19 +11,31 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130625142728) do
+ActiveRecord::Schema.define(:version => 20130626001000) do
+
+  create_table "levels", :force => true do |t|
+    t.integer  "level"
+    t.string   "title"
+    t.integer  "points_per_letter_right"
+    t.integer  "points_per_letter_wrong"
+    t.integer  "points_per_word_right"
+    t.integer  "points_per_word_wrong"
+    t.integer  "points_per_clear"
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
+  end
 
   create_table "question_answers", :force => true do |t|
     t.string   "question"
     t.string   "answer"
     t.integer  "score",      :default => 0
     t.integer  "bonus",      :default => 0
-    t.integer  "level",      :default => 1
+    t.integer  "level_id",   :default => 1
     t.datetime "created_at",                :null => false
     t.datetime "updated_at",                :null => false
   end
 
-  add_index "question_answers", ["level"], :name => "index_question_answers_on_level"
+  add_index "question_answers", ["level_id"], :name => "index_question_answers_on_level_id"
 
   create_table "users", :force => true do |t|
     t.string   "username",               :default => ""

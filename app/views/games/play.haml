@@ -24,7 +24,7 @@
       Right
     %span#right
     %b
-      Total
+      Pairs
     %span#total
     %b.hide
       Bonus
@@ -42,8 +42,10 @@
   #status
     &nbsp;
 #levels.hide
-  %h2 Level
-  .level{:data => { :level => 1 }}
-    1
-  .level{:data => { :level => 2 }}
-    2
+  %h2 Levels
+  -@levels.each do |level|
+    .level{:data => { :level => "#{level.level}" } }
+      .number
+        =level.level
+      .title
+        =level.title

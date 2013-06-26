@@ -61,9 +61,16 @@
     width: 100px;
     height: 100px;
     font-size: 1.8em;
-    line-height: 100px;
+    line-height: 80px;
+    .number{
+      font-weight: bold;
+    }
     &:hover{
       background-color: #eee;
-    };
+    }
+    .title{
+      font-size: 12px;
+      line-height: 20px;
+    }
   }
 }

@@ -4,6 +4,7 @@ class GamesController < ApplicationController
   
   def play
     @title = "welcome"
+    @levels = Level.order('level asc')
   end
 
 end

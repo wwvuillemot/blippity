@@ -1,8 +1,12 @@
 Blippity::Application.routes.draw do
+  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
+
   resources :question_answers
 
+  resources :levels do 
+    resources :question_answers
+  end
 
-  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
   
   match '/play', :to => 'games#play'
 

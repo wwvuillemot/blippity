@@ -1,0 +1,12 @@
+%p#notice= notice
+
+%p
+  %b Level:
+  = @level.level
+%p
+  %b Title:
+  = @level.title
+
+= link_to 'Edit', edit_level_path(@level)
+\|
+= link_to 'Back', levels_path

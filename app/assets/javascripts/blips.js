@@ -68,6 +68,11 @@ var BlipLight = (function (blipManager) {
 var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
   var _maxNumberOfBlips         = maxNumberOfBlips;
   var _domNodeParent            = $(domNodeParent);
+
+  // -------------------------------------------------------
+  // START CLASS CONFIGURATION
+  // -------------------------------------------------------
+    
   var _questionsAnswered        = 0;
   var _score                    = 0;
   var _total                    = 0;
@@ -76,26 +81,71 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
   var _blipManager              = this;
   var _level                    = 1;
   
+  // per level points
+  var _pointsPerLetterRight      = 20;
+  var _pointsPerLetterWrong      = -10;
+  var _pointsPerWordRight        = 40;
+  var _pointsPerWordWrong        = -30;
+  var _pointPerClear             = -20;
+
+  // initial state
+  var _numberOfBlips            = 0;
+  var _running                  = false;
+  
+  // constraints for the blip of light  
+  var _minimumLetterDuration    = 5000;
+  var _minimumLetterWidth       = 40;
+  var _minimumBlipWidth         = 20;
+  var _maximumBlipWidth         = 60;
+  var _minimumBlipDistance      = 100;
+  var _maximumBlipDuration      = 10000;
+  var _footerHeight             = 60;
+  var _AInAscii                 = 97;
+  var _emptyBlipCharacter       = '';
+  var _lettersInAlphabet        = 26;
+      
   this.loadLevel = function(level){
     _level = level;
     _questionsAnswered = 0;
     $.ajax({
       dataType: "json",
-      url: '/question_answers.json',
-      data: {level: _level},
+      url: '/levels/' + _level + '.json',
+      success: function(data){
+        level_points = data;
+        
+        _pointsPerLetterRight      = level_points.points_per_letter_right;
+        _pointsPerLetterWrong      = level_points.points_per_letter_wrong;
+        _pointsPerWordRight        = level_points.points_per_word_right;
+        _pointsPerWordWrong        = level_points.points_per_word_wrong;
+        _pointPerClear             = level_points.points_per_clear;
+
+        _blipManager.loadLevelQuestionAnswers(level);
+      }
+    });
+  }
+    
+  this.loadLevelQuestionAnswers = function(level){
+    _level = level;
+    _questionsAnswered = 0;
+    $.ajax({
+      dataType: "json",
+      url: '/levels/' + _level + '/question_answers.json',
       success: function(data){
         _question_answer_pairs = data;
         _total = _question_answer_pairs.length;
+        
         $('#level').html(_level); 
         $('#score').html(_score); 
         $('#right').html(_right); 
         $('#wrong').html(_wrong); 
         $('#total').html(_total); 
+        
         if(_question_answer_pairs.length == 0){
           $('#question').html('');          
         } else {
           $('#question').html(_question_answer_pairs[_questionsAnswered].question + '?');                    
         }
+        
         _blipManager.init();
       }
     });
@@ -124,30 +174,13 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
       _blipManager.toggle();
     }
   });
-  
-  // initial state
-  var _numberOfBlips            = 0;
-  var _running                  = false;
-  
-  // constraints for the blip of light  
-  var _minimumLetterDuration    = 5000;
-  var _minimumLetterWidth       = 40;
-  var _minimumBlipWidth         = 20;
-  var _maximumBlipWidth         = 60;
-  var _minimumBlipDistance      = 100;
-  var _maximumBlipDuration      = 10000;
-  var _footerHeight             = 60;
-  var _AInAscii                 = 97;
-  var _emptyBlipCharacter       = '';
-  var _lettersInAlphabet        = 26;
-  
-  var _pointsPerLetterRight      = 20;
-  var _pointsPerLetterWrong      = -10;
-  var _pointsPerWordRight        = 40;
-  var _pointsPerWordWrong        = -30;
-  var _pointPerClear             = -20;
+
   
   this.loadLevel(_level);
+  
+  // -------------------------------------------------------
+  // END CLASS CONFIGURATION
+  // -------------------------------------------------------
   
   // done - called by blip of light when its journey is done
   this.done = function(){
@@ -237,7 +270,7 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
     if(player_answer == answer){
       $('#status').show().html('yatzhee.');
       this._score(parseInt(_question_answer_pairs[_questionsAnswered].bonus));
-      this._score(parseInt(_question_answer_pairs[_questionsAnswered].answer_score));
+      this._score(parseInt(_question_answer_pairs[_questionsAnswered].score));
       _right++;
       $('#right').html(_right);
       this.nextQuestion();
