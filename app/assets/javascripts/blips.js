@@ -33,7 +33,7 @@ var BlipLight = (function (blipManager) {
       blipNode.click(function(){
         this.isClicked = true;
         $(this).removeClass('hovered');
-        $(this).addClass('selected');
+        $(this).addClass('clicked');
         $(this).stop();
         isRight = self.blipManager.answer($(this).html());
         if(isRight){
@@ -73,11 +73,6 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
   // START CLASS CONFIGURATION
   // -------------------------------------------------------
     
-  var _questionsAnswered        = 0;
-  var _score                    = 0;
-  var _total                    = 0;
-  var _right                    = 0;
-  var _wrong                    = 0;
   var _blipManager              = this;
   var _level                    = 1;
   
@@ -103,6 +98,16 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
   var _AInAscii                 = 97;
   var _emptyBlipCharacter       = '';
   var _lettersInAlphabet        = 26;
+  
+  var _question                 = '';
+  var _answer                   = '';
+  var _characters               = '';
+  
+  var _questionsAnswered        = 0;
+  var _score                    = 0;
+  var _total                    = 0;
+  var _right                    = 0;
+  var _wrong                    = 0;
       
   this.loadLevel = function(level){
     _level = level;
@@ -119,12 +124,26 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
         _pointsPerWordWrong        = level_points.points_per_word_wrong;
         _pointPerClear             = level_points.points_per_clear;
 
-        _blipManager.loadLevelQuestionAnswers(level);
+        _questionsAnswered        = 0;
+        _score                    = 0;
+        _total                    = 0;
+        _right                    = 0;
+        _wrong                    = 0;
+        
+        $('#question').html(''); 
+        $('#answer').html(''); 
+        $('#level').html(_level); 
+        $('#score').html(_score); 
+        $('#right').html(_right); 
+        $('#wrong').html(_wrong); 
+        $('.blip').remove();
+                        
+        _blipManager._loadLevelQuestionAnswers(level);
       }
     });
   }
     
-  this.loadLevelQuestionAnswers = function(level){
+  this._loadLevelQuestionAnswers = function(level){
     _level = level;
     _questionsAnswered = 0;
     $.ajax({
@@ -132,21 +151,15 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
       url: '/levels/' + _level + '/question_answers.json',
       success: function(data){
         _question_answer_pairs = data;
+
         _total = _question_answer_pairs.length;
-        
-        $('#level').html(_level); 
-        $('#score').html(_score); 
-        $('#right').html(_right); 
-        $('#wrong').html(_wrong); 
         $('#total').html(_total); 
-        
-        if(_question_answer_pairs.length == 0){
-          $('#question').html('');          
-        } else {
-          $('#question').html(_question_answer_pairs[_questionsAnswered].question + '?');                    
+
+        if(_question_answer_pairs.length > 0){
+          _blipManager._setQuestionAnswer();
         }
         
-        _blipManager.init();
+        _blipManager._start();
       }
     });
   }
@@ -176,7 +189,6 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
       _blipManager.toggle();
     }
   });
-
   
   this.loadLevel(_level);
   
@@ -184,6 +196,10 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
   // END CLASS CONFIGURATION
   // -------------------------------------------------------
   
+  // -------------------------------------------------------
+  // PUBLIC METHODS
+  // -------------------------------------------------------
+
   // done - called by blip of light when its journey is done
   this.done = function(){
     _numberOfBlips--;
@@ -201,7 +217,7 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
   this.resume = function(){
     this._setResumeButton();
     this._setRunning(true);
-    this.init();  
+    this._start();  
   }
   
   // running - are blips running or not?
@@ -212,27 +228,11 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
       this.resume();      
     }
   }
-
-  // start - start the blips; will honor the previous session's state
-  this.init = function(){
-    this._getRunning();
-    this._setRunning(_running);
-    this._setControls();
-    if(_running){
-      this._setResumeButton();
-      for(var blip = _numberOfBlips; blip < _maxNumberOfBlips; blip++)
-      {
-        this._create();    
-      }    
-    } else {
-      this._setPauseButton();
-    }
-  }
   
   this.erase = function(){
     $('#answer').html('');
     $('#status').html('&nbsp;');
-    $('.selected').fadeOut(500).remove();
+    $('.blip').fadeOut(500).remove();
   }
   
   this.next = function(){
@@ -241,16 +241,24 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
     this._wrongAnswer();
     $('#answer').html('');
     $('#status').html('&nbsp;');
-    $('.selected').fadeOut(500).hide();    
+    $('.clicked').fadeOut(500).hide();    
+  }
+  
+  this._setQuestionAnswer = function(){
+    _question   = _question_answer_pairs[_questionsAnswered].question;
+    _answer     = _question_answer_pairs[_questionsAnswered].answer;
+    _characters = _answer.split('');
+    $('#question').html(_question + '?');    
   }
   
   this.nextQuestion = function(){
     _questionsAnswered++;
+    this._setQuestionAnswer();
     if(_questionsAnswered < _question_answer_pairs.length){
       $('#status').show().html('&nbsp');
-      $('.selected').fadeOut(500).remove();
+      $('.clicked').fadeOut(500).remove();
       $('#answer').show().html('&nbsp;');
-      $('#question').html(_question_answer_pairs[_questionsAnswered].question + '?');      
+      $('#question').html(_question + '?');      
     }
     else
     {
@@ -266,10 +274,9 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
   
   this.answer = function(letter){
     $('#answer').append(letter);
-    answer = _question_answer_pairs[_questionsAnswered].answer;
     player_answer = $('#answer').html();
     regex = RegExp('^' + player_answer + '.*$','i');
-    if(player_answer == answer){
+    if(player_answer == _answer){
       $('#status').show().html('yatzhee.');
       this._score(parseInt(_question_answer_pairs[_questionsAnswered].bonus));
       this._score(parseInt(_question_answer_pairs[_questionsAnswered].score));
@@ -277,7 +284,7 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
       $('#right').html(_right);
       this.nextQuestion();
       return true;
-    } else if(answer.match(regex)){
+    } else if(_answer.match(regex)){
       this._score(_pointsPerLetterRight);
       return true;
     } else {
@@ -287,7 +294,27 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
       return false;
     }
   };
-  
+
+  // -------------------------------------------------------
+  // PRIVATE METHODS
+  // -------------------------------------------------------
+
+  // start - start the blips; will honor the previous session's state
+  this._start = function(){
+    this._getRunning();
+    this._setRunning(_running);
+    this._setControls();
+    if(_running){
+      this._setResumeButton();
+      for(var blip = _numberOfBlips; blip < _maxNumberOfBlips; blip++)
+      {
+        this._create();    
+      }    
+    } else {
+      this._setPauseButton();
+    }
+  }
+    
   this._wrongAnswer = function(){
     _wrong++;
     $('#wrong').html(_wrong);
