@@ -160,6 +160,8 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
   });
   
   $('#levels .level').click(function(){
+    $('#levels .level').removeClass('selected');
+    $(this).addClass('selected');
     _blipManager.loadLevel($(this).data('level'));
   });
   
