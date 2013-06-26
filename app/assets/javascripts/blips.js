@@ -74,8 +74,8 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
   // -------------------------------------------------------
     
   var _blipManager              = this;
-  var _level                    = $.cookie("blipLevel") != 'undefined' ? $.cookie("blipLevel") : 1;
-    
+  var _level                    = $.cookie("blipLevel") != null ? $.cookie("blipLevel") : 1;
+
   // per level points
   var _pointsPerLetterRight      = 20;
   var _pointsPerLetterWrong      = -10;
