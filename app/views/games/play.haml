@@ -7,24 +7,27 @@
     $('#blipManager').bind('click', function(){
       blipManager.toggle();
     });
-    blipManager.init();
   });
 #scoreboard
+
   .points
     %b
-      Score:
+      Level
+      %level#level
+    %b
+      Score
     %span#score
     %b
-      Wrong:
+      Wrong
     %span#wrong
     %b
-      Right:
+      Right
     %span#right
     %b
-      Total:
+      Total
     %span#total
     %b.hide
-      Bonus:
+      Bonus
     %span#bonus
 #controls.pull-right
   %span#erase
@@ -33,7 +36,14 @@
   %span#next
     %i.icon-circle-arrow-right
     next
-#question
-#answer
-#status
-  &nbsp;
+#blips.hide
+  #question
+  #answer
+  #status
+    &nbsp;
+#levels.hide
+  %h2 Level
+  .level{:data => { :level => 1 }}
+    1
+  .level{:data => { :level => 2 }}
+    2

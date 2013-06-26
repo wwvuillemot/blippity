@@ -2,7 +2,11 @@ class QuestionAnswersController < ApplicationController
   # GET /question_answers
   # GET /question_answers.json
   def index
-    @question_answers = QuestionAnswer.all
+    if params[:level]
+      @question_answers = QuestionAnswer.where(:level => params[:level])
+    else
+      @question_answers = QuestionAnswer.all
+    end
 
     respond_to do |format|
       format.html # index.html.erb
