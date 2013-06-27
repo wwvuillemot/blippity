@@ -2,9 +2,9 @@ var BlipLight = (function (blopManager) {
   this.blopManager      = blopManager;
   this.isClicked        = true;
   
-  this.animate = function(domNode, blopPositionLeft, blopPositionTop, blopDuration, blopDistance, blopWidth, blopLetter){    
+  this.animate = function(domNode, blopPositionLeft, blopPositionTop, blopDuration, blopDistance, blopWidth, blopLetter, blopLevel){    
     blopNode = jQuery('<div/>', {
-        class: 'blop',
+        class: 'blop level' + blopLevel,
         style: 'left: ' + blopPositionLeft + 'px; top: ' + blopPositionTop + 'px; height: ' + blopWidth + 'px; width: ' + blopWidth + 'px; line-height: ' + (blopWidth-10) + 'px; font-size: ' + (blopWidth-15) + 'px;',
         text: blopLetter });
         
@@ -386,7 +386,7 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
       }
       
       blopLight = new BlipLight(this);
-      blopLight.animate(_domNodeParent, blopPositionLeft, blopPositionTop, blopDuration, blopDistance, blopWidth, blopLetter);
+      blopLight.animate(_domNodeParent, blopPositionLeft, blopPositionTop, blopDuration, blopDistance, blopWidth, blopLetter, _level);
     }      
   };  
   

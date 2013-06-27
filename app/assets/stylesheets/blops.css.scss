@@ -13,12 +13,25 @@
   font-size: 2.5em;
   cursor: pointer;
   padding: 0px;
+}
+.level1, .number[data-level="1"]{
   background-color: darkorange;
   box-shadow: 0px 0px 10px darkorange;
+  color: #fff;
+}
+.level2, .number[data-level="2"]{
+  background-color: darkblue;
+  box-shadow: 0px 0px 10px darkblue;
+  color: #fff;
+}
+.level3, .number[data-level="3"]{
+  background-color: purple;
+  box-shadow: 0px 0px 10px purple;
+  color: #fff;
 }
 .hovered{
-  background-color: gold;
-  box-shadow: 0px 0px 10px gold;  
+  background-color: goldenrod;
+  box-shadow: 0px 0px 10px goldenrod;  
 }
 .clicked
 {
