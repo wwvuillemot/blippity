@@ -4,12 +4,11 @@
     var maxNumberOfBlipsAtATime = jQuery.browser.mobile ? 20 : 40;
     var domNodeParent    = '#wrap';
     blopManager = new BlipManager(maxNumberOfBlipsAtATime, domNodeParent);
-    $('#blopManager').bind('click', function(){
+    $('#gamePlayPause').bind('click', function(){
       blopManager.toggle();
     });
   });
 #scoreboard
-
   .points
     %b
       score
@@ -27,23 +26,31 @@
       %b
         bonus
       %span#bonus
-#controls.pull-right
-  %span#erase
-    %i.icon-remove-sign
-    try again
-  %span#next
-    %i.icon-circle-arrow-right
-    next
+      
+#dash.pull-right
+  #controls
+    %span#erase
+      %i.icon-remove-sign
+      try again
+    %span#next
+      %i.icon-circle-arrow-right
+      next
+  #miscellaneous
+    %span#help
+      %i.icon-question-sign
+      help
+      
 #blops.hide
   #question
   #answer
   #status
     &nbsp;
+
 #levels.hide
   %h2 Levels
   -@levels.each do |level|
     .level{:data => { :level => "#{level.level}" } }
-      .number
+      .number{:data => { :level => "#{level.level}" } }
         =level.level
       .title
         =level.title

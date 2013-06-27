@@ -1,41 +1,41 @@
-var BlipLight = (function (blipManager) {
-  this.blipManager      = blipManager;
+var BlipLight = (function (blopManager) {
+  this.blopManager      = blopManager;
   this.isClicked        = true;
   
-  this.animate = function(domNode, blipPositionLeft, blipPositionTop, blipDuration, blipDistance, blipWidth, blipLetter){    
-    blipNode = jQuery('<div/>', {
-        class: 'blip',
-        style: 'left: ' + blipPositionLeft + 'px; top: ' + blipPositionTop + 'px; height: ' + blipWidth + 'px; width: ' + blipWidth + 'px; line-height: ' + (blipWidth-10) + 'px; font-size: ' + (blipWidth-15) + 'px;',
-        text: blipLetter });
+  this.animate = function(domNode, blopPositionLeft, blopPositionTop, blopDuration, blopDistance, blopWidth, blopLetter){    
+    blopNode = jQuery('<div/>', {
+        class: 'blop',
+        style: 'left: ' + blopPositionLeft + 'px; top: ' + blopPositionTop + 'px; height: ' + blopWidth + 'px; width: ' + blopWidth + 'px; line-height: ' + (blopWidth-10) + 'px; font-size: ' + (blopWidth-15) + 'px;',
+        text: blopLetter });
         
 
     self = this;
 
-    if (blipLetter.length == 1)
+    if (blopLetter.length == 1)
     {
       var mouseLeave = null;
-      blipNode.mouseenter(function(){
+      blopNode.mouseenter(function(){
         if(mouseLeave){
           clearTimeout( mouseLeave );          
         }
         $(this).addClass('hovered');
         $(this).stop();
       });
-      blipNode.mouseleave(function(){
+      blopNode.mouseleave(function(){
         if(!this.isClicked){
-          blip = this;
+          blop = this;
           mouseLeave = setTimeout(function () { 
-            $(blip).removeClass('hovered');
-            $(blip).fadeOut(500).remove();
+            $(blop).removeClass('hovered');
+            $(blop).fadeOut(500).remove();
           }, 500);          
         }      
       });
-      blipNode.click(function(){
+      blopNode.click(function(){
         this.isClicked = true;
         $(this).removeClass('hovered');
         $(this).addClass('clicked');
         $(this).stop();
-        isRight = self.blipManager.answer($(this).html());
+        isRight = self.blopManager.answer($(this).html());
         if(isRight){
           $(this).addClass('right');
         } else {
@@ -44,21 +44,21 @@ var BlipLight = (function (blipManager) {
       });
     }
     
-    domNode.append(blipNode);
+    domNode.append(blopNode);
     // animate( end-conditions, duration in milliseconds, end-state call-back )
-    blipNode.animate(
+    blopNode.animate(
       {
         opacity: '=0.0',
-        top:     '+=' + blipDistance,
+        top:     '+=' + blopDistance,
         width:   'toggle',
         height:  'toggle',
         lineHeight: 'toggle',
         fontSize: 'toggle',
       }, 
-      blipDuration, 
+      blopDuration, 
       function() {
         $(this).remove();
-        self.blipManager.done();
+        self.blopManager.done();
       }
     );
   };
@@ -73,8 +73,8 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
   // START CLASS CONFIGURATION
   // -------------------------------------------------------
     
-  var _blipManager              = this;
-  var _level                    = $.cookie("blipLevel") != null ? $.cookie("blipLevel") : 1;
+  var _blopManager              = this;
+  var _level                    = $.cookie("blopLevel") != null ? $.cookie("blopLevel") : 1;
   var _lastevel                 = 3;
   var _startLevel               = 1;
   
@@ -89,7 +89,7 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
   var _numberOfBlips            = 0;
   var _running                  = false;
   
-  // constraints for the blip of light  
+  // constraints for the blop of light  
   var _minimumLetterDuration    = 5000;
   var _minimumLetterWidth       = 40;
   var _minimumBlipWidth         = 20;
@@ -117,7 +117,7 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
       _level = _startLevel;
     }
     
-    $.cookie("blipLevel", _level);
+    $.cookie("blopLevel", _level);
     $('#levels .level').removeClass('selected');
     $('#levels .level[data-level="' + _level + '"]' ).addClass('selected');
     
@@ -146,9 +146,9 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
         $('#score').html(_score); 
         $('#right').html(_right); 
         $('#wrong').html(_wrong); 
-        $('.blip').remove();
+        $('.blop').remove();
                         
-        _blipManager._loadLevelQuestionAnswers(level);
+        _blopManager._loadLevelQuestionAnswers(level);
       }
     });
   }
@@ -166,16 +166,16 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
         $('#total').html(_total); 
 
         if(_question_answer_pairs.length > 0){
-          _blipManager._setQuestionAnswer();
+          _blopManager._setQuestionAnswer();
         }
         
-        _blipManager._start();
+        _blopManager._start();
       }
     });
   }
     
   $('#erase').click(function(){
-    _blipManager.erase();
+    _blopManager.erase();
   });
   
   $('#next').click(function(){
@@ -185,18 +185,18 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
   $('#levels .level').click(function(){
     $('#levels .level').removeClass('selected');
     $(this).addClass('selected');
-    _blipManager.loadLevel($(this).data('level'));
+    _blopManager.loadLevel($(this).data('level'));
   });
   
   $('body').keyup(function(e){
     if(e.keyCode == 39){
-      _blipManager.next();
+      _blopManager.next();
     }
     if(e.keyCode == 8){
-      _blipManager.erase();
+      _blopManager.erase();
     }
     if(e.keyCode == 32){
-      _blipManager.toggle();
+      _blopManager.toggle();
     }
   });
   
@@ -210,27 +210,27 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
   // PUBLIC METHODS
   // -------------------------------------------------------
 
-  // done - called by blip of light when its journey is done
+  // done - called by blop of light when its journey is done
   this.done = function(){
     _numberOfBlips--;
     this._create();
   }
   
-  // pause - user calls to pause blips
+  // pause - user calls to pause blops
   this.pause = function(){
     this._setPauseButton();
     this._setRunning(false);
     this._setControls();
   }
   
-  // resume - user calls to resume blips
+  // resume - user calls to resume blops
   this.resume = function(){
     this._setResumeButton();
     this._setRunning(true);
     this._start();  
   }
   
-  // running - are blips running or not?
+  // running - are blops running or not?
   this.toggle = function(){
     if(_running){
       this.pause();
@@ -242,7 +242,7 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
   this.erase = function(){
     $('#answer').html('');
     $('#status').html('&nbsp;');
-    $('.blip').fadeOut(500).remove();
+    $('.blop').fadeOut(500).remove();
   }
   
   this.next = function(){
@@ -280,9 +280,9 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
       $('#question').hide().fadeIn(3000).html('fin.');
       setTimeout( 
         function(){ 
-          _blipManager.pause(); 
+          _blopManager.pause(); 
           _level++;
-          _blipManager.loadLevel(_level); 
+          _blopManager.loadLevel(_level); 
         }, 
         3500
       );
@@ -316,14 +316,14 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
   // PRIVATE METHODS
   // -------------------------------------------------------
 
-  // start - start the blips; will honor the previous session's state
+  // start - start the blops; will honor the previous session's state
   this._start = function(){
     this._getRunning();
     this._setRunning(_running);
     this._setControls();
     if(_running){
       this._setResumeButton();
-      for(var blip = _numberOfBlips; blip < _maxNumberOfBlips; blip++)
+      for(var blop = _numberOfBlips; blop < _maxNumberOfBlips; blop++)
       {
         this._create();    
       }    
@@ -350,43 +350,43 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
 
   // private methods
   
-  // create - create a new blip of light
+  // create - create a new blop of light
   this._create = function(){
     if(_running && (_numberOfBlips <= _maxNumberOfBlips))
     {
       _numberOfBlips++;
-      var blipDistance      = -1;
-      var blipPositionLeft  = 0;
-      var blipPositionTop   = 0;
-      var blipDuration      = 0;
-      var blipLetter        = _emptyBlipCharacter;
-      var blipWidth         = _minimumBlipWidth - 1;
+      var blopDistance      = -1;
+      var blopPositionLeft  = 0;
+      var blopPositionTop   = 0;
+      var blopDuration      = 0;
+      var blopLetter        = _emptyBlipCharacter;
+      var blopWidth         = _minimumBlipWidth - 1;
       
-      while(blipDistance < _minimumBlipDistance)
+      while(blopDistance < _minimumBlipDistance)
       {
-        blipPositionLeft  = $(window).width() * Math.random();
-        blipPositionTop   = $(window).height() * Math.random();
-        blipDuration      = _maximumBlipDuration * Math.random();
-        blipDistance      = $(window).height() - (blipPositionTop + _footerHeight);
-        blipWidth         = _maximumBlipWidth * Math.random();
+        blopPositionLeft  = $(window).width() * Math.random();
+        blopPositionTop   = $(window).height() * Math.random();
+        blopDuration      = _maximumBlipDuration * Math.random();
+        blopDistance      = $(window).height() - (blopPositionTop + _footerHeight);
+        blopWidth         = _maximumBlipWidth * Math.random();
       }
       
-      if(blipDuration >= _minimumLetterDuration && blipWidth >= _minimumLetterWidth ){
+      if(blopDuration >= _minimumLetterDuration && blopWidth >= _minimumLetterWidth ){
         // determine the character to show
         // increasing reveal less and less
         probability_of_selecting_answer_character = (0.50 / _level);
         roll_of_dice = Math.random();
         if(probability_of_selecting_answer_character <= roll_of_dice ){
           player_answer = $('#answer').html();
-          blipLetter = _characters[player_answer.length];
+          blopLetter = _characters[player_answer.length];
         }else{          
           ascii_code = _AInAscii + Math.floor(_lettersInAlphabet * Math.random());
-          blipLetter = String.fromCharCode(ascii_code); 
+          blopLetter = String.fromCharCode(ascii_code); 
         }
       }
       
-      blipLight = new BlipLight(this);
-      blipLight.animate(_domNodeParent, blipPositionLeft, blipPositionTop, blipDuration, blipDistance, blipWidth, blipLetter);
+      blopLight = new BlipLight(this);
+      blopLight.animate(_domNodeParent, blopPositionLeft, blopPositionTop, blopDuration, blopDistance, blopWidth, blopLetter);
     }      
   };  
   
@@ -400,23 +400,23 @@ var BlipManager = ( function(maxNumberOfBlips, domNodeParent) {
   }
   
   this._setPauseButton = function(){
-    $('#blipManager').html("<i class='icon-play'></i>");
-    $('#blips').fadeOut(300);
+    $('#blopManager').html("<i class='icon-play'></i>");
+    $('#blops').fadeOut(300);
     $('#levels').delay(300).fadeIn(300);
   }
   
   this._setResumeButton = function(){
-    $('#blipManager').html("<i class='icon-pause'></i>");
+    $('#blopManager').html("<i class='icon-pause'></i>");
     $('#levels').fadeOut(300);
-    $('#blips').delay(300).fadeIn(300);
+    $('#blops').delay(300).fadeIn(300);
   }  
   this._setRunning = function(isRunning){
     _running = isRunning;
-    $.cookie("blipManagerRunning", isRunning);
+    $.cookie("blopManagerRunning", isRunning);
   }
 
   this._getRunning = function(){
-    _running = $.cookie("blipManagerRunning") == 'true' ? true : false;
+    _running = $.cookie("blopManagerRunning") == 'true' ? true : false;
   }
   
 });

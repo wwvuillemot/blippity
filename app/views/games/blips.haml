@@ -4,12 +4,11 @@
     var maxNumberOfBlipsAtATime = jQuery.browser.mobile ? 20 : 40;
     var domNodeParent    = '#wrap';
     blipManager = new BlipManager(maxNumberOfBlipsAtATime, domNodeParent);
-    $('#blipManager').bind('click', function(){
+    $('#gamePlayPause').bind('click', function(){
       blipManager.toggle();
     });
   });
 #scoreboard
-
   .points
     %b
       score
