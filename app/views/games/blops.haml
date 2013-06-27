@@ -8,8 +8,7 @@
       blopManager.toggle();
     });
     $('body').keyup(function(e){
-      // alert(e.keyCode);
-      if(e.keyCode == 72){
+      if(e.keyCode == 72 || e.keyCode == 104 || e.keyCode == 63 || e.keyCode == 191){
         $('#helpModal').modal('toggle');
       }
     });    
@@ -116,9 +115,12 @@
       press
       %b
         h
+      or
+      %b
+        ?
       to open and close this help screen.
     %p
-      sort of a self-referencing kind of thing.  i like being canonical.  you?
+      it is sort of a self-referencing kind of thing.  i like being canonical.  you?
               
   .modal-footer
     %button.btn{ :data => { :dismiss => :modal }, :aria => { :hidden => :true } }
