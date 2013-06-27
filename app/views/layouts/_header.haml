@@ -7,7 +7,7 @@
         %span.icon-bar
       %a.brand{:href => root_path}
         blippity
-      -if(current_user && params[:controller] == 'games' && params[:action] != 'play')
+      -if(current_user && params[:controller] == 'games' && ('blops').include?(params[:action]))
         .nav
           %ul.nav
             %li
@@ -31,7 +31,7 @@
                 play
 
             %li
-              %a{ :href => edit_user_registration_path(current_user) }
+              -#%a{ :href => edit_user_registration_path(current_user) }
                 =current_user.display_name
                 -image_tag current_user.image_url
             %li
