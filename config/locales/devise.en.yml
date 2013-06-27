@@ -3,28 +3,28 @@
 en:
   devise:
     confirmations:
-      confirmed: "Your account was successfully confirmed. You are now signed in."
-      send_instructions: "You will receive an email with instructions about how to confirm your account in a few minutes."
-      send_paranoid_instructions: "If your email address exists in our database, you will receive an email with instructions about how to confirm your account in a few minutes."
+      confirmed: "open the bubbly, i can confirm i know you. we are now bff."
+      send_instructions: "hold your horses; you will receive an email with words about how to confirm your account in a few minutes."
+      send_paranoid_instructions: "party time?  if your email address exists in our database, you will receive an email with instructions about how to confirm your account in a few minutes."
     failure:
-      already_authenticated: "You are already signed in."
-      inactive: "Your account was not activated yet."
-      invalid: "Invalid email or password."
-      invalid_token: "Invalid authentication token."
-      locked: "Your account is locked."
-      not_found_in_database: "Invalid email or password."
-      timeout: "Your session expired, please sign in again to continue."
-      unauthenticated: "You need to sign in or sign up before continuing."
-      unconfirmed: "You have to confirm your account before continuing."
+      already_authenticated: "congrats to me, i already know who you are."
+      inactive: "you gotta validate who you are first.  who are you?"
+      invalid: "sorry, but your email or password is invalid.  hey, i just work here."
+      invalid_token: "whoa, your authentication token is invalid.  whatever that means."
+      locked: "sorry, bub.  your account is locked."
+      not_found_in_database: "huh? your email or password makes no sense."
+      timeout: "oops, your session expired, please remind me who you are."
+      unauthenticated: "opps!  who are you?"
+      unconfirmed: "soory, but you have to confirm who you are who you say you are before i can let you in."
     mailer:
       confirmation_instructions:
-        subject: "Confirmation instructions"
+        subject: "confirmation instructions"
       reset_password_instructions:
-        subject: "Reset password instructions"
+        subject: "reset password instructions"
       unlock_instructions:
-        subject: "Unlock Instructions"
+        subject: "unlock Instructions"
     omniauth_callbacks:
-      failure: "Could not authenticate you from %{kind} because \"%{reason}\"."
+      failure: "could not authenticate you from %{kind} because \"%{reason}\"."
       success: "welcome back!"
     passwords:
       no_token: "You can't access this page without coming from a password reset email. If you do come from a password reset email, please make sure you used the full URL provided."
