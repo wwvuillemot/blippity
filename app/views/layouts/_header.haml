@@ -7,7 +7,7 @@
         %span.icon-bar
       %a.brand{:href => root_path}
         blippity
-      -if(current_user && params[:controller] == 'games')
+      -if(current_user && params[:controller] == 'games' && params[:action] != 'play')
         .nav
           %ul.nav
             %li

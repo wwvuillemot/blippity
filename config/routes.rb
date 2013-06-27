@@ -8,7 +8,9 @@ Blippity::Application.routes.draw do
   end
 
   
-  match '/play', :to => 'games#play'
+  match '/play',       :to => 'games#play'
+  match '/play/blips', :to => 'games#blips'
+  match '/play/blops', :to => 'games#blops'
 
   match '/about', :to => 'pages#about'
   root :to => 'pages#index'

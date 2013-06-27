@@ -1,0 +1,49 @@
+:javascript
+  var blipManager;
+  $(document).ready( function() {
+    var maxNumberOfBlipsAtATime = jQuery.browser.mobile ? 20 : 40;
+    var domNodeParent    = '#wrap';
+    blipManager = new BlipManager(maxNumberOfBlipsAtATime, domNodeParent);
+    $('#blipManager').bind('click', function(){
+      blipManager.toggle();
+    });
+  });
+#scoreboard
+
+  .points
+    %b
+      score
+    %span#score
+    %b
+      wrong
+    %span#wrong
+    %b
+      right
+    %span#right
+    .hide
+      %b
+        pairs
+      %span#total
+      %b
+        bonus
+      %span#bonus
+#controls.pull-right
+  %span#erase
+    %i.icon-remove-sign
+    try again
+  %span#next
+    %i.icon-circle-arrow-right
+    next
+#blips.hide
+  #question
+  #answer
+  #status
+    &nbsp;
+#levels.hide
+  %h2 Levels
+  -@levels.each do |level|
+    .level{:data => { :level => "#{level.level}" } }
+      .number
+        =level.level
+      .title
+        =level.title
