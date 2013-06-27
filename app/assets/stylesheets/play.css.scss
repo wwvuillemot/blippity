@@ -67,6 +67,9 @@
       width: 128px;
       height: 128px;
       line-height: 105px;
+      .number{
+        margin: 30px 35px 20px 35px !important;
+      }
       .title{
         font-size: 12px;
         line-height: 20px;
@@ -87,6 +90,9 @@
       .number{
         border: 5px solid rgba(255, 255, 255, 0.6);
         margin: 45px 65px 45px 65px;
+        @media (max-width: 380px) {
+          margin: 25px 30px 15px 30px !important;
+        }
       }
       .title{
         color: #666;
@@ -99,6 +105,9 @@
     box-shadow: 0px 0px 10px #ccc;   
     .number{
       border-radius: 50%;
+      @media (max-width: 380px) {
+        margin: 25px 30px 15px 30px !important;
+      }
     }
   }
 }
