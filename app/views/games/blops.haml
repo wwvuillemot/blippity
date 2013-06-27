@@ -36,9 +36,10 @@
       %i.icon-circle-arrow-right
       next
   #miscellaneous
-    %span#help
+    %span#help{ :href => '#helpModal', :role => :button, :data => { :toggle => :modal} }
       %i.icon-question-sign
       help
+
       
 #blops.hide
   #question
@@ -54,3 +55,60 @@
         =level.level
       .title
         =level.title
+
+#helpModal.modal.hide.fade{ :tabindex => -1, :role => :dialog, :aria => { :labelledBy => :helpModelLabel, :hidden => :true} }
+  .modal-header
+    %button.close{ :data => { :dismiss => :modal }, :aria => { :hidden => true } }
+      %i.icon-remove
+    %h3#myModalHelp
+      blop help
+  .modal-body
+
+    %h4
+      goal
+    %p
+      i will give you a word.
+    %p
+      you figure out the other word.
+    %p
+      i will always give you a hint, one letter at a time.  as you get better, i get more recalcitrant, as it were.
+
+    %h4
+      %i.icon-play-sign 
+      play,
+      %i.icon-pause
+      pause
+    %p
+      %b
+        click 
+      on them at the top of the window to start and stop our game whenever you like.
+    %p
+      or press
+      %b
+        spacebar
+
+    %h4
+      %i.icon-remove-sign
+      try again
+    %p
+      make a mistake?
+      
+    %h4
+      %i.icon-circle-arrow-right
+      next  
+    %p
+      give up?  of course you won't ... but if you do.
+    %p
+      or press your keyboard's 
+      %b
+        right arrow
+        
+    %h4
+      %i.icon-question-sign
+      help
+    %p
+      sort of a self-referencing kind of thing.  i like being canonical.  you?
+              
+  .modal-footer
+    %button.btn{ :data => { :dismiss => :modal }, :aria => { :hidden => :true } }
+      close
