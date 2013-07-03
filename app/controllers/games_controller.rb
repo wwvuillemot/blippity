@@ -17,4 +17,8 @@ class GamesController < ApplicationController
     @levels = Level.order('level asc')
   end
 
+  def cocos
+    @title = "cocos"
+  end
+
 end
