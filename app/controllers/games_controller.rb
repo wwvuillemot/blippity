@@ -21,4 +21,8 @@ class GamesController < ApplicationController
     @title = "cocos"
   end
 
+  def ghost
+    @title = "ghost"
+  end
+
 end

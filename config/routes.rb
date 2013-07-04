@@ -12,6 +12,7 @@ Blippity::Application.routes.draw do
   match '/play/blips', :to => 'games#blips'
   match '/play/blops', :to => 'games#blops'
   match '/play/cocos', :to => 'games#cocos'
+  match '/play/ghost', :to => 'games#ghost'
 
   match '/about', :to => 'pages#about'
   root :to => 'pages#index'
