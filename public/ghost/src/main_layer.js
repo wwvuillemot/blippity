@@ -117,25 +117,24 @@ var MainLayer = cc.LayerColor.extend({
         var degreesDiff    = this._player.getRotation() - cocosAngle;
         var rotateDuration = Math.abs(degreesDiff / rotateDegreesPerSecond);
 
+
+        this._player.runAction(cc.Sequence.create(
+          cc.RotateTo.create( rotateDuration, cocosAngle)
+        ));
+        
         // Move projectile to actual endpoint
         projectile.runAction(cc.Sequence.create( // 2
+            cc.DelayTime.create(rotateDuration),
             cc.MoveTo.create(realMoveDuration, realDest),
             cc.CallFunc.create(function(node) {
                 cc.ArrayRemoveObject(this._projectiles, node);
                 node.removeFromParent();
             }, this)
-        ));
-                
-        this._player.runAction(cc.Sequence.create(
-          cc.RotateTo.create( rotateDuration, cocosAngle),
-          cc.CallFunc.create( function(node) {
-            projectile.setTag(2);
-            this._projectiles.push(projectile);
-            audioEngine.playEffect(snd_shootEffect);
-          }, this)
-        ));
+        ));       
         
-        // Add to array
+        projectile.setTag(2);
+        this._projectiles.push(projectile);
+        audioEngine.playEffect(snd_shootEffect); 
     },
  
     onMouseUp:function (event) {
