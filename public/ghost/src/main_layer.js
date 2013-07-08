@@ -110,8 +110,13 @@ var MainLayer = cc.LayerColor.extend({
         var angleRadians = Math.atan( offset.y / offset.x );
         var angleDegrees = angleRadians * 180.0 / Math.PI;
         var cocosAngle = -1 * angleDegrees;
-        this._player.setRotation( cocosAngle );        
+        //this._player.setRotation( cocosAngle );     
+        var duration = 0.1;  
         
+        var rotateDegreesPerSecond = 180 / 0.5; // Would take 0.5 seconds to rotate 180 degrees, or half a circle
+        var degreesDiff    = this._player.getRotation() - cocosAngle;
+        var rotateDuration = Math.abs(degreesDiff / rotateDegreesPerSecond);
+
         // Move projectile to actual endpoint
         projectile.runAction(cc.Sequence.create( // 2
             cc.MoveTo.create(realMoveDuration, realDest),
@@ -120,11 +125,17 @@ var MainLayer = cc.LayerColor.extend({
                 node.removeFromParent();
             }, this)
         ));
- 
+                
+        this._player.runAction(cc.Sequence.create(
+          cc.RotateTo.create( rotateDuration, cocosAngle),
+          cc.CallFunc.create( function(node) {
+            projectile.setTag(2);
+            this._projectiles.push(projectile);
+            audioEngine.playEffect(snd_shootEffect);
+          }, this)
+        ));
+        
         // Add to array
-        projectile.setTag(2);
-        this._projectiles.push(projectile);
-        audioEngine.playEffect(snd_shootEffect);
     },
  
     onMouseUp:function (event) {
