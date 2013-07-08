@@ -4,6 +4,7 @@ var audioEngine = cc.AudioEngine.getInstance();
 var MainLayer = cc.LayerColor.extend({
     _projectiles:[],
     _monsters:[],
+    _player:null,
     _monstersDestroyed:0,
     // 2
     ctor:function() {
@@ -25,13 +26,13 @@ var MainLayer = cc.LayerColor.extend({
         }
  
         // 5
-        var player = cc.Sprite.create(res_player);
+        this._player = cc.Sprite.create(res_player);
  
         // 6
-        player.setPosition(player.getContentSize().width / 2, winSize.height / 2);
+        this._player.setPosition(this._player.getContentSize().width / 2, winSize.height / 2);
  
         // 7
-        this.addChild(player);
+        this.addChild(this._player);
         this.schedule(this.gameLogic, 3);
         this.scheduleUpdate();
         audioEngine.playMusic(snd_bgMusic, true);
@@ -92,18 +93,25 @@ var MainLayer = cc.LayerColor.extend({
         // Ok to add now - we've double checked position
         this.addChild(projectile);
  
+        
         // Figure out final destination of projectile
         var realX = winSize.width + (projectile.getContentSize().width / 2);
         var ratio = offset.y / offset.x;
         var realY = (realX * ratio) + projectile.getPosition().y;
         var realDest = cc.p(realX, realY);
- 
+        
         // Determine the length of how far you're shooting
         var offset = cc.pSub(realDest, projectile.getPosition());
         var length = cc.pLength(offset);
         var velocity = 480.0;
         var realMoveDuration = length / velocity;
  
+        // Determine angle to face
+        var angleRadians = Math.atan( offset.y / offset.x );
+        var angleDegrees = angleRadians * 180.0 / Math.PI;
+        var cocosAngle = -1 * angleDegrees;
+        this._player.setRotation( cocosAngle );        
+        
         // Move projectile to actual endpoint
         projectile.runAction(cc.Sequence.create( // 2
             cc.MoveTo.create(realMoveDuration, realDest),
