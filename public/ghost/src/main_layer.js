@@ -1,4 +1,6 @@
 // 1
+var audioEngine = cc.AudioEngine.getInstance();
+
 var MainLayer = cc.LayerColor.extend({
     _projectiles:[],
     _monsters:[],
@@ -31,6 +33,7 @@ var MainLayer = cc.LayerColor.extend({
         this.addChild(player);
         this.schedule(this.gameLogic, 3);
         this.scheduleUpdate();
+        audioEngine.playMusic(snd_bgMusic, true);
     },
     
     addMonster:function() {
@@ -71,6 +74,7 @@ var MainLayer = cc.LayerColor.extend({
     gameLogic:function(dt) {
         this.addMonster();
     },
+    
     locationTapped:function(location) {
         // Set up initial location of the projectile
         var projectile = cc.Sprite.create(res_projectile);
@@ -109,6 +113,7 @@ var MainLayer = cc.LayerColor.extend({
         // Add to array
         projectile.setTag(2);
         this._projectiles.push(projectile);
+        audioEngine.playEffect(snd_shootEffect);
     },
  
     onMouseUp:function (event) {
