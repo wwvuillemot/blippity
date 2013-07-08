@@ -43,6 +43,7 @@
         appFiles:[
             //add your own files in order here
             '/ghost/src/resource.js',
+            '/ghost/src/game_over.js',
             '/ghost/src/main_layer.js',
             '/ghost/src/main.js',
         ]
